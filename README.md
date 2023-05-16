@@ -2,6 +2,8 @@
 
 This project aims to display the *intricate relations* between furries in the most beautiful manner
 
+![banner](images/banner.png)
+
 ## Installation 
 
 Clone this repository
