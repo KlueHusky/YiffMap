@@ -17,8 +17,6 @@ KEY_INDIVIDUALS_SPECIES = "species"
 
 
 class ColorPalette:
-    #background = (0.02, 0.02, 0.04)
-    #edges = (0.35, 0.31, 0.68)
     background = np.array([12, 18, 12]) / 255
     edges = np.array([194, 1, 20]) / 255
     nodes = np.array([109, 114, 117]) / 255
@@ -63,8 +61,6 @@ forceatlas2 = ForceAtlas2(
 def check_arguments(argv):
     if len(argv) < 3:
         raise RuntimeError("Not enough arguments, try running python yiffmap.py <data_file>.yaml <output_file>.[png|pdf]")
-    elif len(argv) > 3:
-        raise RuntimeError("Too many arguments, try running python yiffmap.py <data_file>.yaml <output_file>.[png|pdf]")
 
 
 class Map:
@@ -140,8 +136,7 @@ class Map:
                 if name not in self._names:
                     raise RuntimeError(f"Name \"{name}\" is missing from individuals list")
                 
-    def graph(self, output_file : str):
-        #G = nx.DiGraph()
+    def graph(self, output_file : str, labels : bool = True):
         G = nx.Graph()
 
         G.add_nodes_from(self._names)
@@ -150,21 +145,8 @@ class Map:
             rSize = len(r[KEY_RELATIONS_INDIVIDUALS])
             for c in combinations(r[KEY_RELATIONS_INDIVIDUALS], 2):
                 G.add_edge(*c, weight=2/rSize)
-            #G.add_edges_from([r[KEY_RELATIONS_INDIVIDUALS]])
 
         plt.figure(figsize=FIGURE_SIZE, dpi=DPI)
-        #positions = nx.spring_layout(G, k=0.15)
-        #positions = nx.kamada_kawai_layout(G)
-        #print(type(G.edges.values()))
-
-        #nx.draw_networkx_nodes(G, positions, node_size=20, node_color="blue", alpha=0.4, label="test")
-        #nx.draw_networkx_edges(G, positions, edge_color=(1,1,1), alpha=0.05)
-        #plt.figure(dpi=50)
-        #positions = forceatlas2.forceatlas2_networkx_layout(G, pos=None, iterations=500)
-        #positions = nx.fruchterman_reingold_layout(G)
-        #positions = nx.spring_layout(G)
-        #nx.draw_networkx_nodes(G, positions, node_size=20, node_color="blue", alpha=0.4, label="test")
-        #nx.draw_networkx_edges(G, positions, edge_color=(1,1,1), alpha=0.05)
 
         positions = forceatlas2.forceatlas2_networkx_layout(G, iterations=ITERATIONS)
 
@@ -188,12 +170,13 @@ class Map:
             edge_color=ColorPalette.edges,
             alpha=EDGE_ALPHA,
             )
-        nx.draw_networkx_labels(
-            G,
-            positions,
-            font_color=ColorPalette.labels,
-            font_size=FONT_SIZE
-            )
+        if labels:
+            nx.draw_networkx_labels(
+                G,
+                positions,
+                font_color=ColorPalette.labels,
+                font_size=FONT_SIZE
+                )
 
         fig = plt.gcf()
         fig.patch.set_facecolor(ColorPalette.background)
@@ -202,7 +185,6 @@ class Map:
         plt.tight_layout()
         if output_file is not None:
             plt.savefig(output_file, dpi=DPI)
-        #plt.show()
         
 
     def display_stats(self):
