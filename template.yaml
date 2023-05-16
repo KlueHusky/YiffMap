@@ -1,0 +1,22 @@
+individuals:
+  - name: Alice
+    country_code: US
+    species:
+      - Wolf
+      - Bunny
+  - name: Bob
+    country_code: FR
+    species:
+      - Husky
+  - name: Carl
+    country_code: CH
+relations:
+  - individuals:
+      - Alice
+      - Bob
+    privacy: 0 # Privacy from 0 to 2
+  - individuals:
+      - Alice
+      - Bob
+      - Carl
+    privacy: 1

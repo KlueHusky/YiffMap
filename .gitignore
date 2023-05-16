@@ -178,3 +178,4 @@ pyrightconfig.json
 
 *.yaml
 *.pdf
+!template.yaml
