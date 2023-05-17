@@ -28,3 +28,8 @@ Run the mapping code :
 ``python yiffmap.py data_file.yaml output_file.pdf``
 
 the output file can also be a ``.png``
+
+
+## Note
+
+The current project is only compatible with python 3.8 and networkx<=2.8
